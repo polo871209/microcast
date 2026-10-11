@@ -8,14 +8,6 @@ struct RoomsScreen: PaletteScreen {
 
     var rows: [RoomRow] { coordinator.rows(for: vm.query) }
 
-    var primaryActionTitle: String {
-        switch row(at: vm.selection) {
-        case .edit: "Choose Windows"
-        case .create: "Create Room"
-        case .room, nil: "Enter Room"
-        }
-    }
-
     private func row(at selection: Int) -> RoomRow? {
         let rows = rows
         return rows.indices.contains(selection) ? rows[selection] : nil

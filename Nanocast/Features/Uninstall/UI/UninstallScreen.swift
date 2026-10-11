@@ -15,8 +15,6 @@ struct UninstallScreen: PaletteScreen {
         }
     }
 
-    var primaryActionTitle: String { "Uninstall Application" }
-
     private var summary: String {
         let total = session.plan?.removableIDs.count ?? 0
         let size = MeasuredSize(bytes: session.selectedBytes).formatted

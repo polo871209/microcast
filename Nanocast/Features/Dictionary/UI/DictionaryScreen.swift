@@ -11,8 +11,6 @@ struct DictionaryScreen: PaletteScreen {
 
     var rows: [DictionaryEntry] { entry.map { [$0] } ?? [] }
 
-    var primaryActionTitle: String { "Copy Definition" }
-
     func actions(at selection: Int) -> PopoverMenuContent? {
         guard let entry else { return nil }
         return PopoverMenuContent(

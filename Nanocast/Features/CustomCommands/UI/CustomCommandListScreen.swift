@@ -8,7 +8,6 @@ struct CustomCommandListScreen: PaletteScreen {
     let openActions: () -> Void
 
     let rows: [CustomCommand]
-    var primaryActionTitle: String { rows.isEmpty ? "Create Custom Command" : "Run Command" }
     let actsWithoutRows = true
 
     init(
