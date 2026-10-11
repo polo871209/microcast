@@ -105,8 +105,7 @@ run link-destination-test  $L/LinkDestination.swift
 run menu-search-test       $L/SearchRelevance.swift \
                            Nanocast/Features/MenuSearch/Model/*.swift \
                            Nanocast/Features/MenuSearch/Service/*.swift
-run window-switch-test     $L/SearchRelevance.swift \
-                           Nanocast/Features/WindowSwitcher/Model/*.swift
+run window-switch-test     Nanocast/Features/WindowSwitcher/Model/*.swift
 run ranking-test           $L/SearchRelevance.swift $L/ScriptRomanization.swift \
                            $L/LauncherMatch.swift $L/LauncherRankingStore.swift
 run scopes-test            $L/SearchScopes.swift

@@ -6,7 +6,6 @@ enum PaletteMode: String, CaseIterable, Identifiable {
     case calculatorHistory
     case emoji
     case menuSearch
-    case switchWindows
     case rooms
     case roomWindows
     case customCommandEditor
@@ -27,7 +26,6 @@ enum PaletteMode: String, CaseIterable, Identifiable {
         case .calculatorHistory: return "plus.forwardslash.minus"
         case .emoji: return "face.smiling"
         case .menuSearch: return "menubar.rectangle"
-        case .switchWindows: return "macwindow.on.rectangle"
         case .rooms: return "door.left.hand.open"
         case .roomWindows: return "macwindow.badge.plus"
         case .customCommandEditor, .customCommands: return CustomCommand.sfSymbol
@@ -42,7 +40,6 @@ enum PaletteMode: String, CaseIterable, Identifiable {
         case .calculatorHistory: return "Do math, convert units, or search your past calculations…"
         case .emoji: return "Search emoji and symbols…"
         case .menuSearch: return "Search menu bar items…"
-        case .switchWindows: return "Search open windows…"
         case .rooms: return "Search rooms, or name a new one…"
         case .roomWindows: return "Search windows, or type an app to add…"
         case .customCommandEditor: return "Command editor"

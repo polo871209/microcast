@@ -64,9 +64,6 @@ struct PaletteShortcutTests {
         expect(
             resolve("q", shift: true, option: true, control: true), .forceQuit,
             "⌃⌥⇧Q force quits the app")
-        expect(resolve("m", shift: true, control: true), .minimizeWindow, "⌃⇧M minimizes the window")
-        expect(resolve("m", command: true), nil, "⌘M stays the app menu's Minimize")
-        expect(resolve("h", shift: true, control: true), .hideApp, "⌃⇧H hides the app")
         expect(resolve("r", command: true), .restart, "⌘R restarts the app")
         expect(resolve("r", command: true, shift: true), .restart, "an extra Shift still reads ⌘R")
 
@@ -88,8 +85,8 @@ struct PaletteShortcutTests {
         expect(resolve("a"), nil, "typing is never a chord")
 
         let expanded: [PaletteShortcut] = [
-            .copyText, .toggleFavorite, .hideFromSearch, .quit, .forceQuit, .minimizeWindow, .hideApp,
-            .restart, .edit, .duplicate, .showInFinder
+            .copyText, .toggleFavorite, .hideFromSearch, .quit, .forceQuit, .restart, .edit,
+            .duplicate, .showInFinder
         ]
         let anywhere: [PaletteShortcut] = [
             .commandDelete, .delete, .deleteAll, .pin, .favoriteSlot(0), .newItem,
@@ -104,10 +101,10 @@ struct PaletteShortcutTests {
 
         let closing: [PaletteShortcut] = [
             .delete, .deleteAll, .copyText, .copyCalculation, .toggleFavorite, .hideFromSearch,
-            .minimizeWindow, .newItem, .settings, .edit, .duplicate, .showInFinder
+            .newItem, .settings, .edit, .duplicate, .showInFinder
         ]
         let leaving: [PaletteShortcut] = [
-            .commandDelete, .quit, .forceQuit, .hideApp, .restart, .pin, .favoriteSlot(0)
+            .commandDelete, .quit, .forceQuit, .restart, .pin, .favoriteSlot(0)
         ]
         for shortcut in closing {
             expect(shortcut.closesMenu, "\(shortcut) closes an open menu")

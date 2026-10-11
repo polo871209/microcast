@@ -6,7 +6,6 @@ final class PaletteCoordinator {
     private let settings: AppSettings
     private let appIndex: AppIndex
     private let menuSearch: MenuSearchSession
-    private let windowSwitch: WindowSwitchSession
     private let windowController: PaletteWindowController
     var onLauncherShown: (() -> Void)?
     var onScreenOpening: ((PaletteMode) -> Void)?
@@ -16,14 +15,12 @@ final class PaletteCoordinator {
         settings: AppSettings,
         appIndex: AppIndex,
         menuSearch: MenuSearchSession,
-        windowSwitch: WindowSwitchSession,
         windowController: PaletteWindowController
     ) {
         self.palette = palette
         self.settings = settings
         self.appIndex = appIndex
         self.menuSearch = menuSearch
-        self.windowSwitch = windowSwitch
         self.windowController = windowController
     }
 
@@ -81,7 +78,6 @@ final class PaletteCoordinator {
         onScreenOpening?(palette.mode)
         windowController.show()
         if palette.mode == .menuSearch { menuSearch.filter(palette.query) }
-        if palette.mode == .switchWindows { windowSwitch.filter(palette.query) }
         if palette.mode == .launcher {
             Task { await appIndex.refresh() }
             onLauncherShown?()
@@ -99,7 +95,6 @@ final class PaletteCoordinator {
 
     func hidePalette(restoreFocus: Bool = true) {
         menuSearch.reset()
-        windowSwitch.reset()
         windowController.hide(restoreFocus: restoreFocus)
     }
 

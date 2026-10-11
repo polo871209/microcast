@@ -10,8 +10,6 @@ enum PaletteShortcut: Equatable {
     case hideFromSearch
     case quit
     case forceQuit
-    case minimizeWindow
-    case hideApp
     case restart
     case newItem
     case edit
@@ -32,8 +30,6 @@ enum PaletteShortcut: Equatable {
         if command, matches("f") { return shift ? .toggleFavorite : .showInFinder }
         if command, shift, matches("h") { return .hideFromSearch }
         if control, shift, matches("q") { return option ? .forceQuit : .quit }
-        if control, shift, matches("m") { return .minimizeWindow }
-        if control, shift, matches("h") { return .hideApp }
         if command, matches("r") { return .restart }
         if command, !shift, matches("n") { return .newItem }
         if command, !shift, !option, !control, matches("e") { return .edit }
@@ -44,8 +40,8 @@ enum PaletteShortcut: Equatable {
 
     var requiresExpanded: Bool {
         switch self {
-        case .copyText, .toggleFavorite, .hideFromSearch, .quit, .forceQuit, .minimizeWindow, .hideApp,
-            .restart, .edit, .duplicate, .showInFinder:
+        case .copyText, .toggleFavorite, .hideFromSearch, .quit, .forceQuit, .restart, .edit,
+            .duplicate, .showInFinder:
             true
         case .commandDelete, .delete, .deleteAll, .pin, .favoriteSlot, .newItem,
             .settings, .copyCalculation:
@@ -56,9 +52,9 @@ enum PaletteShortcut: Equatable {
     var closesMenu: Bool {
         switch self {
         case .delete, .deleteAll, .copyText, .copyCalculation, .toggleFavorite, .hideFromSearch,
-            .minimizeWindow, .newItem, .settings, .edit, .duplicate, .showInFinder:
+            .newItem, .settings, .edit, .duplicate, .showInFinder:
             true
-        case .commandDelete, .quit, .forceQuit, .hideApp, .restart, .pin, .favoriteSlot:
+        case .commandDelete, .quit, .forceQuit, .restart, .pin, .favoriteSlot:
             false
         }
     }
