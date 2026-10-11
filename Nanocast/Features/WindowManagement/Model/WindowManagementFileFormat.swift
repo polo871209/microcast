@@ -1,22 +1,16 @@
 import CoreGraphics
 import Foundation
 
-/// Window management's lists as settings.json spells them, each record with its shortcut and alias.
 enum WindowManagementFileFormat {
-    /// Each command's text, nil for `null`; a wrong-typed one has no entry and keeps its own.
     typealias CommandTexts = (texts: [WindowCommand.ID: String?], problems: [String])
 
     struct Decoded<Record> {
         var records: [Record] = []
-        /// By record, nil for `null`; a missing or wrong-typed field has none and keeps its value.
         var shortcuts: [UUID: String?] = [:]
         var aliases: [UUID: String?] = [:]
         var problems: [String] = []
     }
 
-    // MARK: - Command shortcuts
-
-    /// Every command, unbound ones as `null`, so the file itself lists what can be bound.
     static func json(commandShortcuts: [WindowCommand.ID: String]) -> SettingsFileJSON {
         .object(
             WindowCommand.ID.allCases.map { id in
@@ -24,12 +18,9 @@ enum WindowManagementFileFormat {
             })
     }
 
-    /// A command the object leaves out is unbound, the same as one set to `null`.
     static func commandShortcuts(from json: SettingsFileJSON) -> CommandTexts? {
         commandTexts(from: json, noun: "a shortcut")
     }
-
-    // MARK: - Command aliases
 
     static func json(commandAliases: [WindowCommand.ID: String]) -> SettingsFileJSON {
         .object(
@@ -61,8 +52,6 @@ enum WindowManagementFileFormat {
         }
         return (texts, problems)
     }
-
-    // MARK: - Custom sizes
 
     static func json(_ size: CustomWindowSize, shortcut: String?, alias: String?) -> SettingsFileJSON {
         .object([
@@ -103,8 +92,6 @@ enum WindowManagementFileFormat {
         }
         return decoded
     }
-
-    // MARK: - Layouts
 
     static func json(_ layout: WindowLayout, shortcut: String?, alias: String?) -> SettingsFileJSON {
         .object([
@@ -154,7 +141,6 @@ enum WindowManagementFileFormat {
                         "\(label): app \(position + 1) needs an “app” and a “display.id”")
                     continue
                 }
-                // Derived, not stored, so reading the same file twice yields the same layout.
                 let entryID = SettingsFileIdentity.uuid(for: "\(id.uuidString):\(entries.count)")
                 let offset = point(app["offset"], label: label, into: &decoded)
                 entries.append(
@@ -179,8 +165,6 @@ enum WindowManagementFileFormat {
         }
         return decoded
     }
-
-    // MARK: - Rooms
 
     static func json(_ room: Room, shortcut: String?, alias: String?) -> SettingsFileJSON {
         let layoutsByDisplay = room.layoutsByDisplay.sorted { $0.key < $1.key }.map {
@@ -218,7 +202,6 @@ enum WindowManagementFileFormat {
         ])
     }
 
-    /// Recency and window numbers are left for the store to put back; the file never holds them.
     static func rooms(from json: SettingsFileJSON) -> Decoded<Room>? {
         guard let items = json.items else { return nil }
         var decoded = Decoded<Room>()
@@ -265,8 +248,6 @@ enum WindowManagementFileFormat {
         return decoded
     }
 
-    // MARK: - Fields
-
     private static func text(_ value: String?) -> SettingsFileJSON {
         value.map(SettingsFileJSON.string) ?? .null
     }
@@ -279,7 +260,6 @@ enum WindowManagementFileFormat {
         "\(dimension.value)\(dimension.unit.suffix)"
     }
 
-    /// `"60%"` or `"900pt"`; a bare number reads as points, the unit a person means by one.
     private static func dimension(_ json: SettingsFileJSON?) -> CustomWindowSize.Dimension? {
         if let points = json?.number {
             return Int(exactly: points.rounded()).map { .init($0, .points) }
@@ -294,7 +274,6 @@ enum WindowManagementFileFormat {
         return nil
     }
 
-    /// The record's own id, or one its name always yields when the file was written without one.
     private static func identity<Record>(
         of item: SettingsFileJSON, kind: String, name: String, label: String,
         into decoded: inout Decoded<Record>

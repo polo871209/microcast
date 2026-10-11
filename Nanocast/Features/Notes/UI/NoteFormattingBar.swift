@@ -37,8 +37,7 @@ struct NoteFormattingBar: View {
     ]
 
     private static let lists = [
-        Control(symbol: "list.number", title: "Numbered List", shortcut: "⇧⌘7", action: .toggleList(.ordered))
-        {
+        Control(symbol: "list.number", title: "Numbered List", shortcut: "⇧⌘7", action: .toggleList(.ordered)) {
             $0.list == .ordered
         },
         Control(symbol: "list.bullet", title: "Bullet List", shortcut: "⇧⌘8", action: .toggleList(.bullet)) {
@@ -63,11 +62,9 @@ struct NoteFormattingBar: View {
                     group(Self.blocks, formatting)
                     group(Self.lists, formatting)
                 }
-                // Grows out of the round button; nothing leaves the capsule, so no clip is needed.
                 .transition(.scale(scale: 0.6, anchor: .trailing).combined(with: .opacity))
             }
             NoteFormattingToggle(isExpanded: isExpanded, action: notes.toggleFormattingBar)
-                // Drawn above the buttons, so they grow out from behind it.
                 .zIndex(1)
         }
         .padding(Theme.Spacing.xs)
@@ -104,12 +101,10 @@ private struct NoteFormattingToggle: View {
         .focusable(false)
         .accessibilityLabel("Formatting")
         .accessibilityValue(isExpanded ? "Expanded" : "Collapsed")
-        // Against the window's trailing edge, so a centred label would run off it.
         .tooltip("Formatting  ⌥⌘T", alignment: .trailing)
     }
 }
 
-/// Symbols differ in width, so a fixed frame keeps every button the same square.
 private struct NoteBarGlyph: View {
     let name: String
 
@@ -132,14 +127,12 @@ private struct NoteHeadingButton: View {
         BarButton(isSelected: isHeading || isOpen, isCompact: true, action: action) {
             HStack(spacing: Theme.Spacing.xs) {
                 NoteBarGlyph(name: "textformat.size")
-                // Rotates rather than swaps, so opening the menu cannot shift the bar.
                 Image(systemName: "chevron.down")
                     .font(Theme.Typography.disclosure)
                     .rotationEffect(.degrees(isOpen ? 180 : 0))
                     .animation(reduceMotion ? nil : Theme.MenuMotion.chevronAnimation, value: isOpen)
             }
         }
-        // Its menu hangs off this frame, which only the laid-out view knows.
         .onGeometryChange(for: CGRect.self) {
             $0.frame(in: .global)
         } action: {
@@ -149,7 +142,6 @@ private struct NoteHeadingButton: View {
         .accessibilityLabel("Heading")
         .accessibilityValue(accessibilityValue)
         .accessibilityAddTraits(isHeading ? .isSelected : [])
-        // The leading end of an expanded capsule, which a narrow note pushes against the edge.
         .tooltip(isOpen ? nil : "Heading", alignment: .leading)
     }
 

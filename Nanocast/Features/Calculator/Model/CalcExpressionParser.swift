@@ -59,7 +59,6 @@ struct CalcExpressionParser {
         return left
     }
 
-    /// A mid-expression `to` only when `+`/`-` follows it: `to usd * 30` stays genuinely ambiguous.
     private func peekAdditiveConversion() -> String? {
         guard position + 2 < tokens.count, CalcUnits.isConnector(tokens[position]),
             case .ident(let name) = tokens[position + 1],
@@ -173,7 +172,6 @@ struct CalcExpressionParser {
             if lhs.category == .temperature, lhs.symbol != rhs.symbol {
                 return fail("Cannot combine temperatures with different units.")
             }
-            // Composite ("5 feet 3 inches") answers in its leading unit; `+`/`-` in the last.
             if implicit {
                 guard let converted = convertedMeasurement(right.amount, from: rhs, to: lhs) else {
                     return nil
@@ -203,7 +201,6 @@ struct CalcExpressionParser {
             return fail(
                 "Cannot \(op == .add ? "add" : "subtract") Currency and \(rhs.category.displayName)."
             )
-        // A bare number takes the unit beside it; adjacency stays silent, being a half-typed unit.
         case (.unit, .scalar), (.currency, .scalar):
             guard !implicit else { return nil }
             return CalcValue(
@@ -531,7 +528,6 @@ struct CalcExpressionParser {
         return CalcValue(amount: result, kind: keepsUnit ? first.kind : .scalar)
     }
 
-    /// A group is its own conversion scope, so `(20 sgd to usd) * 30` converts then multiplies.
     private mutating func parseGrouped() -> CalcValue? {
         guard let close = matchingParenthesis() else { return nil }
         position += 1
@@ -544,7 +540,6 @@ struct CalcExpressionParser {
         return converted(value, to: target.name)
     }
 
-    /// A lone unit or currency implies an amount of 1, the way `eur to usd` already does.
     private mutating func parseGroupedValue(upTo end: Int) -> CalcValue? {
         if end - position == 1, case .ident(let name) = tokens[position],
             let kind = dimension(named: name)

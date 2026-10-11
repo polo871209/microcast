@@ -1,5 +1,8 @@
 # Third-party notices
 
+Nanocast is a modified version of [Tinycast](https://github.com/abue-ammar/tinycast), Copyright (C) 2026
+Abue Ammar, under the same licence.
+
 Nanocast is licensed under the GNU Affero General Public License v3 — see [LICENSE](LICENSE). It
 also redistributes the third-party material recorded below, under the terms stated for each.
 
@@ -328,45 +331,6 @@ Its licence requires this notice to travel with the work:
 MIT License
 
 Copyright (c) 2026 Sara Gordić
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-## File Search — the disk index
-
-Search Files' index follows the design of **fsearch** by Noah Dunnagan,
-<https://github.com/noahdunnagan/fsearch>, which is MIT licensed. Nanocast's implementation is its
-own Swift, but its architecture follows that project: the `getattrlistbulk` crawl, the
-block-ordered index with interned names, folder-only fields and parents taken from block starts,
-live updates from FSEvents as a dead-entry bitset plus an overlay, and building the index out of
-process so its memory is returned. The files that follow it:
-
-- `Nanocast/Features/FileSearch/Service/`: `FileIndexCrawler.swift`, `FileIndexSnapshot.swift`,
-  `FileIndex.swift`, `FileSystemWatcher.swift` and `FileIndexer.swift`
-- `Nanocast/Features/FileSearch/Helper/FileIndexHelper.swift`
-
-Its licence notice:
-
-```
-MIT License
-
-Copyright (c) 2026 Noah Dunnagan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

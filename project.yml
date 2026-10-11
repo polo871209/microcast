@@ -2,7 +2,7 @@ name: Nanocast
 options:
   bundleIdPrefix: com.nanocast
   deploymentTarget:
-    macOS: "26.0"
+    macOS: "27.0"
   createIntermediateGroups: true
   groupSortPosition: top
 
@@ -13,9 +13,9 @@ settings:
     SWIFT_VERSION: "6.0"
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Manual
-    # A stable self-signed identity keeps the Accessibility grant across rebuilds. docs/signing.md
+    # Stable self-signed identity so macOS keeps the Accessibility grant across rebuilds.
     CODE_SIGN_IDENTITY: "Nanocast Self-Signed"
-    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
     NANOCAST_BUNDLE_IDENTIFIER: com.nanocast.app
   configs:
     Debug:
@@ -25,7 +25,6 @@ settings:
       DICTATION_EXECUTABLE_NAME: Nanocast Dictation
       # Release-only: library validation refuses Debug's `.debug.dylib`, whose team never matches.
       ENABLE_HARDENED_RUNTIME: YES
-      # Strip the shipped binary (dSYM is still generated first) and drop unused code.
       DEPLOYMENT_POSTPROCESSING: YES
       STRIP_INSTALLED_PRODUCT: YES
       STRIP_SWIFT_SYMBOLS: YES
@@ -37,14 +36,11 @@ targets:
     platform: macOS
     sources:
       - path: Nanocast
-        # Helper-only sources: compiling them in would link Vision and PDFKit into the app.
         excludes:
           - Features/Clipboard/Service/ClipboardTextExtractor.swift
           - Features/Clipboard/Service/ClipboardTextHelper.swift
           - Features/Dictation/Helper
-          - Features/FileSearch/Helper
           - Resources/EmojiKeywords
-      # A folder reference keeps the packs in their own directory, which `EmojiIndex` lists.
       - path: Nanocast/Resources/EmojiKeywords
         type: folder
       # The MIT mark's licence asks the notice to travel with the binary, not just the repo.
@@ -54,7 +50,6 @@ targets:
       - target: DictationHelper
         link: false
         embed: false
-      # Resolve the embedded helper against the active channel, not Xcode's default configuration.
       - framework: "$(BUILT_PRODUCTS_DIR)/$(DICTATION_EXECUTABLE_NAME).app"
         link: false
         embed: true
@@ -63,14 +58,6 @@ targets:
           destination: wrapper
           subpath: Contents/Helpers
       - target: ClipboardTextHelper
-        link: false
-        embed: true
-        codeSign: true
-        copy:
-          destination: wrapper
-          subpath: Contents/Helpers
-      # The crawl runs out of process, so its memory is returned when the helper exits.
-      - target: FileIndexHelper
         link: false
         embed: true
         codeSign: true
@@ -88,7 +75,6 @@ targets:
           - "$(inherited)"
           - "@executable_path/../Frameworks"
       configs:
-        # Debug is its own channel, so a local build never corrupts the installed app's state.
         Debug:
           PRODUCT_NAME: Nanocast Dev
 
@@ -100,29 +86,9 @@ targets:
       - Nanocast/Features/Clipboard/Service/ClipboardTextHelper.swift
     settings:
       base:
-        # Pinned, or release.yml's PRODUCT_NAME renames the binary `ClipboardTextWorker` looks for.
         EXECUTABLE_NAME: ClipboardTextHelper
         PRODUCT_MODULE_NAME: ClipboardTextHelper
         SKIP_INSTALL: YES
-
-  FileIndexHelper:
-    type: tool
-    platform: macOS
-    sources:
-      - Nanocast/Features/FileSearch/Helper/FileIndexHelper.swift
-      - Nanocast/Features/FileSearch/Model/FileSearchIgnoreList.swift
-      - Nanocast/Features/FileSearch/Model/FileSearchPolicy.swift
-      - Nanocast/Features/FileSearch/Model/FileSearchQuery.swift
-      - Nanocast/Features/FileSearch/Model/FileSearchScope.swift
-      - Nanocast/Features/FileSearch/Service/FileIndexCrawler.swift
-      - Nanocast/Features/FileSearch/Service/FileIndexSnapshot.swift
-    settings:
-      base:
-        # Pinned like ClipboardTextHelper's: release.yml's PRODUCT_NAME would otherwise rename it.
-        EXECUTABLE_NAME: FileIndexHelper
-        PRODUCT_MODULE_NAME: FileIndexHelper
-        SKIP_INSTALL: YES
-        SWIFT_OPTIMIZATION_LEVEL: -O
 
   DictationHelper:
     type: application

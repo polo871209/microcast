@@ -1,6 +1,5 @@
 import Foundation
 
-/// Launcher items in settings.json: each app, pane, system action and built-in command as a record.
 @MainActor
 final class LauncherSettingsFile {
     private typealias Record = LauncherFileFormat.Record
@@ -61,7 +60,6 @@ final class LauncherSettingsFile {
         return catalogBinding(for: key, items: items, noun: "system action")
     }
 
-    /// The built-in commands `owner` lists; nil is the Commands pane's own.
     func commandsBinding(for key: SettingsFileKey, owner: SettingsTab?) -> SettingsFileBinding {
         let items = CommandID.allCases.filter { $0.owner == owner && !$0.isQueryDriven }.map { id in
             Item(
@@ -97,8 +95,6 @@ final class LauncherSettingsFile {
         }
         return issues + shortcuts.commit()
     }
-
-    // MARK: - Bindings
 
     private func catalogBinding(
         for key: SettingsFileKey, items: [Item], noun: String
@@ -152,13 +148,10 @@ final class LauncherSettingsFile {
             })
     }
 
-    // MARK: - Items
-
     private func item(_ bundleID: String, _ bundle: Bundle) -> Item {
         Item(name: bundleID, preferenceKey: bundleID, action: bundle.action(bundleID))
     }
 
-    /// What Settings lists, plus a bound app outside the search scopes, which keeps its shortcut.
     private func knownBundleIDs(_ bundle: Bundle) -> Set<String> {
         let hotKeys = shortcuts.hotKeys
         var bundleIDs = Set(bundle == .app ? hotKeys.boundBundleIDs : hotKeys.boundPaneBundleIDs)
@@ -183,7 +176,6 @@ final class LauncherSettingsFile {
         }
     }
 
-    /// An item the records leave out gets the empty one, so a line the file drops clears its row.
     private func apply(
         _ records: [String: Record], to items: [Item], noun: String, key: SettingsFileKey
     ) -> [SettingsFileIssue] {

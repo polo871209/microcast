@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// One titled run of grid cells; `start` is the flat selection index of its first cell.
 struct EmojiGridSection: Identifiable {
     let title: String
     let entries: [EmojiEntry]
@@ -10,7 +9,6 @@ struct EmojiGridSection: Identifiable {
 }
 
 enum EmojiGrid {
-    /// Ranked results while searching, otherwise pinned, frequent and catalog sections in order.
     @MainActor
     static func sections(
         query: String, index: EmojiIndex, frequent: FrequentEmojiStore,
@@ -62,7 +60,6 @@ enum EmojiGrid {
         return sections
     }
 
-    /// Two rows of the latest emoji, counted over the catalog so a glyph it lacks takes no cell.
     @MainActor
     static func frequentlyUsed(
         _ frequent: FrequentEmojiStore, in index: EmojiIndex, columns: EmojiGridColumns
@@ -71,7 +68,6 @@ enum EmojiGrid {
     }
 }
 
-/// One grid row of cells; `start` is its first cell's flat selection index.
 private struct EmojiGridRow: Identifiable {
     let id: String
     let start: Int
@@ -99,17 +95,14 @@ struct EmojiGridView: View {
 
     @Environment(\.metrics) private var metrics
     let sections: [EmojiGridSection]
-    /// Flat selection index across all sections, as in the list modes.
     let selection: Int
     let tone: EmojiSkinTone
     let columns: EmojiGridColumns
-    /// The pending scroll request; mouse selection leaves it untouched.
     let scroll: ScrollIntent
     let onSelect: (Int) -> Void
     let onActivate: () -> Void
     let onActions: (Int) -> Void
 
-    /// Headers + rows in visible order; rows are the scroll targets. docs/features/emoji.md
     private var items: [EmojiGridItem] {
         var items: [EmojiGridItem] = []
         for section in sections {
@@ -135,7 +128,6 @@ struct EmojiGridView: View {
         return items
     }
 
-    /// The row holding the selection; IDs are section-namespaced, as frequents repeat.
     private var selectedRowID: String? {
         guard let section = sections.last(where: { selection >= $0.start }),
             selection - section.start < section.entries.count
@@ -143,7 +135,6 @@ struct EmojiGridView: View {
         return section.id + "-row-\((selection - section.start) / columns.rawValue)"
     }
 
-    /// First grid row; selecting into it restores the origin instead, so its header shows.
     private var firstRowID: String? { sections.first.map { $0.id + "-row-0" } }
 
     var body: some View {
@@ -177,7 +168,6 @@ struct EmojiGridView: View {
             }
             .edgeDissolve()
             .thinScrollbar()
-            // Snap to the origin on the first grid row so its header shows too.
             .scrollFollowsSelection(
                 scroll, row: selectedRowID, atOrigin: selectedRowID == firstRowID, proxy: proxy
             )
@@ -185,7 +175,6 @@ struct EmojiGridView: View {
     }
 }
 
-/// Count trails the title without changing the shared section header used by the other screens.
 private struct EmojiSectionHeader: View {
     @Environment(\.metrics) private var metrics
     let title: String
@@ -207,7 +196,6 @@ private struct EmojiSectionHeader: View {
     }
 }
 
-/// One grid row, owning all interaction for its cells. See docs/features/emoji.md#rendering.
 private struct EmojiGridRowView: View {
     @Environment(\.metrics) private var metrics
     let row: EmojiGridRow
@@ -223,7 +211,6 @@ private struct EmojiGridRowView: View {
 
     private var spacing: CGFloat { metrics.spacing.md }
 
-    /// The palette has a fixed metric width, so cells can be square without a measuring render pass.
     private var cellSize: CGFloat {
         let count = CGFloat(columns.rawValue)
         let contentWidth = metrics.size.panelWidth - metrics.size.emojiGridInset * 2
@@ -241,14 +228,12 @@ private struct EmojiGridRowView: View {
                         size: cellSize
                     )
                 } else {
-                    // Empty trailing slots keep a partial last row aligned with the full rows.
                     Color.clear.frame(width: cellSize, height: cellSize)
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
-        // Single tap selects; the double-tap paste rides along as a simultaneous gesture.
         .gesture(
             SpatialTapGesture().onEnded { value in
                 if let column = column(at: value.location) { onSelect(row.start + column) }
@@ -275,7 +260,6 @@ private struct EmojiGridRowView: View {
         .onChange(of: palette.hoverDisarmToken) { hoveredColumn = nil }
     }
 
-    /// Point → column, rejecting the gap between cells and empty slots in a partial row.
     private func column(at point: CGPoint) -> Int? {
         guard point.x >= 0 else { return nil }
         let pitch = cellSize + spacing
@@ -286,7 +270,6 @@ private struct EmojiGridRowView: View {
     }
 }
 
-/// Pure content: no gestures, overlays or hover tracking. See docs/features/emoji.md#rendering.
 private struct EmojiCell: View {
     @Environment(\.metrics) private var metrics
     let glyph: String
@@ -307,7 +290,6 @@ private struct EmojiCell: View {
         return ZStack {
             shape.fill(fill)
             if selected {
-                // A blurred duplicate keeps every colour in the glyph instead of inventing a tint.
                 selectedHalo
                     .opacity(0.25)
                     .clipShape(shape)
@@ -335,7 +317,6 @@ private struct EmojiCell: View {
         .animation(.easeOut(duration: Theme.Duration.hover), value: hovered)
     }
 
-    /// Oversized before blur so its multi-colour wash reaches every corner of the selected tile.
     private var selectedHalo: some View {
         Text(glyph)
             .font(.system(size: size))

@@ -1,6 +1,5 @@
 import CoreGraphics
 
-/// The 3×3 position grid. Raw values are spelled out so renaming a case can't rename a stored one.
 enum WindowLayoutAnchor: String, Codable, CaseIterable, Sendable {
     case topLeft = "top-left"
     case top
@@ -12,7 +11,6 @@ enum WindowLayoutAnchor: String, Codable, CaseIterable, Sendable {
     case bottom
     case bottomRight = "bottom-right"
 
-    /// `place(_:in:)` stays the only anchor arithmetic in the codebase; this is just the spelling.
     var placement: WindowPlacementEngine.Anchor {
         WindowPlacementEngine.Anchor(horizontal: horizontal, vertical: vertical)
     }
@@ -48,7 +46,6 @@ enum WindowLayoutAnchor: String, Codable, CaseIterable, Sendable {
         }
     }
 
-    /// The one place an axis pair maps back to a case, so the grid and `describe` agree.
     static func named(
         horizontal: WindowPlacementEngine.Anchor.Axis, vertical: WindowPlacementEngine.Anchor.Axis
     ) -> WindowLayoutAnchor {
