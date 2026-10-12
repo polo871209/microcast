@@ -1,5 +1,5 @@
 enum SettingsTab: CaseIterable, Identifiable {
-    case general, applications, systemSettings, systemActions, commands, clipboard,
+    case general, applications, systemSettings, systemActions, commands, clipboard, screenshot,
         windowManagement, navigation, notes, emoji, dictation, permissions, backup, about
     var id: Self { self }
 
@@ -15,6 +15,7 @@ enum SettingsTab: CaseIterable, Identifiable {
         case .navigation: return "Navigation"
         case .windowManagement: return "Window Management"
         case .clipboard: return "Clipboard"
+        case .screenshot: return "Screenshot"
         case .emoji: return "Emoji & Symbols"
         case .permissions: return "Permissions"
         case .backup: return "Backup"
@@ -34,6 +35,7 @@ enum SettingsTab: CaseIterable, Identifiable {
         case .navigation: return "arrow.left.arrow.right"
         case .windowManagement: return "macwindow"
         case .clipboard: return "doc.on.clipboard"
+        case .screenshot: return "camera.viewfinder"
         case .emoji: return "face.smiling"
         case .permissions: return "lock.shield"
         case .backup: return "arrow.up.arrow.down.circle"
@@ -61,7 +63,7 @@ enum SettingsSection: CaseIterable, Identifiable {
         case .launcher:
             return [.applications, .systemSettings, .systemActions, .commands]
         case .features:
-            return [.clipboard, .windowManagement, .navigation, .notes, .emoji, .dictation]
+            return [.clipboard, .screenshot, .windowManagement, .navigation, .notes, .emoji, .dictation]
         case .advanced: return [.backup, .about]
         }
     }

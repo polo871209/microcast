@@ -45,7 +45,7 @@ final class PaletteCoordinator {
         if isShowing(.launcher) {
             hidePalette()
         } else {
-            showPalette(mode: .launcher, restoreAnyMode: true)
+            showPalette(mode: .launcher)
         }
     }
 
@@ -65,11 +65,9 @@ final class PaletteCoordinator {
         }
     }
 
-    func showPalette(
-        mode: PaletteMode, restoreAnyMode: Bool = false, seeding query: String? = nil
-    ) {
+    func showPalette(mode: PaletteMode, seeding query: String? = nil) {
         let preserved = windowController.consumePreservedState()
-        let restoring = preserved && (restoreAnyMode || palette.mode == mode)
+        let restoring = preserved && palette.mode == mode
         let alreadyFresh = windowController.isPoppedToRoot && palette.mode == mode
         if query != nil || !(restoring || alreadyFresh) {
             navigate(to: mode)

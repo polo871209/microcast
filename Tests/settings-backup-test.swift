@@ -29,7 +29,7 @@ struct SettingsBackupTest {
             "autoSwitchInputSource", "paletteDraggable", "palettePosition",
             "paletteExpandedCenterDisplays", "notesEnabled", "notesRendersMarkdown",
             "notesShowsFormattingBar", "notesFolder", "customCommandsEnabled",
-            "customCommandsShowInLauncher", "navigationEnabled", "menuSearchDisabledApps",
+            "customCommandsShowInLauncher", "screenshotSaveFolder", "navigationEnabled", "menuSearchDisabledApps",
             "menuSearchShowsAppleMenu", "windowSwitcherExcludedApps", "windowManagementEnabled",
             "windowManagementShowInLauncher",
             "windowManagementGap", "windowManagementCycleMode", "windowLayoutsShowInLauncher",
