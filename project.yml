@@ -39,6 +39,7 @@ targets:
         excludes:
           - Features/Clipboard/Service/ClipboardTextExtractor.swift
           - Features/Clipboard/Service/ClipboardTextHelper.swift
+          - Features/Screenshot/Service/ScreenshotTextExtractor.swift
           - Features/Dictation/Helper
           - Resources/EmojiKeywords
       - path: Nanocast/Resources/EmojiKeywords
@@ -84,6 +85,7 @@ targets:
     sources:
       - Nanocast/Features/Clipboard/Service/ClipboardTextExtractor.swift
       - Nanocast/Features/Clipboard/Service/ClipboardTextHelper.swift
+      - Nanocast/Features/Screenshot/Service/ScreenshotTextExtractor.swift
     settings:
       base:
         EXECUTABLE_NAME: ClipboardTextHelper
