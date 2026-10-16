@@ -1,0 +1,48 @@
+import Foundation
+
+enum UpdateFailure: LocalizedError, Equatable {
+    case downloadFailed(String)
+    case extractFailed(String)
+    case noAppInArchive
+    case quarantined
+    case bundleMismatch
+    case identityMismatch
+    case versionMismatch(expected: String, found: String)
+    case replaceFailed(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .downloadFailed(let detail):
+            return "The download did not finish. \(detail)"
+        case .extractFailed(let detail):
+            return "The downloaded archive could not be expanded. \(detail)"
+        case .noAppInArchive:
+            return "The downloaded archive does not contain Nanocast."
+        case .quarantined:
+            return "macOS quarantined the downloaded app and Nanocast could not clear the flag."
+        case .bundleMismatch:
+            return "The downloaded app is not this build of Nanocast."
+        case .identityMismatch:
+            return "The downloaded app is not signed by the identity this copy was signed with."
+        case .versionMismatch(let expected, let found):
+            return "The downloaded app is version \(found), not \(expected)."
+        case .replaceFailed(let detail):
+            return "Nanocast could not be replaced. \(detail)"
+        }
+    }
+
+    var recoverySuggestion: String? {
+        switch self {
+        case .identityMismatch, .bundleMismatch, .versionMismatch:
+            return "Nothing was installed. Download the release from GitHub instead, so you can "
+                + "check it yourself."
+        case .replaceFailed:
+            return "Nothing was installed. This usually means /Applications is not writable by "
+                + "your account."
+        case .quarantined:
+            return "Nothing was installed."
+        default:
+            return nil
+        }
+    }
+}

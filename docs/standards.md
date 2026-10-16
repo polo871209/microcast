@@ -1,6 +1,6 @@
 # Engineering standards
 
-How code in Tinycast is written. This is **guidance** — it describes what the codebase already looks
+How code in Nanocast is written. This is **guidance** — it describes what the codebase already looks
 like so that new code reads like it was there all along, and a good reason to depart from it is a good
 reason. What is actually checked is the bar in
 [testing.md](testing.md#definition-of-done); the rules that may not be broken at all are the
@@ -10,7 +10,7 @@ When this document and the code disagree, the code is probably right and this fi
 
 ## Posture
 
-Tinycast supports macOS 26 and later, with macOS 27 strongly preferred. Swift 6+ with complete strict
+Nanocast supports macOS 26 and later, with macOS 27 strongly preferred. Swift 6+ with complete strict
 concurrency is required. Prefer the latest Swift patterns and modern Apple APIs, following
 [`AGENTS.md`](../AGENTS.md#posture-modern-first-always).
 
@@ -40,7 +40,7 @@ cross an asynchronous actor boundary.
 
 Full detail in [architecture.md](architecture.md); the rules a new feature has to satisfy:
 
-- **One folder per feature** under `Tinycast/Features/<Name>/`, holding everything that feature owns —
+- **One folder per feature** under `Nanocast/Features/<Name>/`, holding everything that feature owns —
   its model, its services, its views and its own Settings panes.
 - A larger feature splits into `Model/` (pure), `Service/` (effects), `UI/` (views and the feature's
   coordinator) and `Settings/` (its panes). A small one stays flat. Split when the flat folder stops being
